@@ -1,6 +1,8 @@
 package org.hse.example;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
@@ -33,12 +35,10 @@ public interface Counter {
 /**
  * Реализация {@link Counter}
  */
+@Data
+@AllArgsConstructor
 class CounterImpl implements Counter {
     private final int length;
-
-    public CounterImpl(int length) {
-        this.length = length;
-    }
 
     protected Lucky getInstance(final int length, final int number) {
         return Ticket.getInstance(length, number);
