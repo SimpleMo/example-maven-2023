@@ -16,7 +16,13 @@ import java.util.Set;
 public interface Ticket extends Lucky {
 
     static Ticket getInstance(final int length, final int number) {
-        return new TicketImpl(length, number);
+        var lengthModulus = Math.abs(length);
+        var maxNumber = Math.pow(10, lengthModulus) - 1;
+        if (number > maxNumber) {
+            throw new IllegalArgumentException(String.format("Количество цифр в номере %d больше %d", number, length));
+        }
+
+        return new TicketImpl(lengthModulus, Math.abs(number));
     }
 
     int getLength();
@@ -50,6 +56,7 @@ public interface Ticket extends Lucky {
          */
         @Override
         public boolean isLucky() {
+            // todo покрыть тестами
             int middle = getLength() / 2;
             int half = Double.valueOf(Math.pow(10, middle)).intValue();
 

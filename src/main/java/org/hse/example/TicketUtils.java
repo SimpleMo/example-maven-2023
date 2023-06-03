@@ -30,10 +30,5 @@ public final class TicketUtils {
                 .ofNullable(ticket)
                 .map(Ticket::getNumber)
                 .map(TicketUtils::getDigitsSum);
-//                .orElse(() -> -1);
-//                .orElseThrow(IllegalArgumentException::new);
-        // 1. Если null, то выкинуть исключение.
-        // 2. Какое-то значение по умолчанию, в т.ч. null.
-        // 3. Вернуть не число, а Optional
     }
 }

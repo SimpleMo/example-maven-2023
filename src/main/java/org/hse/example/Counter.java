@@ -78,6 +78,7 @@ class CounterStreamImpl extends CounterImpl implements Supplier<Stream<Ticket>> 
 
     @Override
     public int count() {
+        // todo покрыть тестами
         return (int) get().count();
 
     }
