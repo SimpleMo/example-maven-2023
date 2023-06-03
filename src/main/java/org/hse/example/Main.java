@@ -9,7 +9,7 @@ import java.util.stream.Stream;
  */
 public class Main {
 
-    private static Function<Integer, LuckyStatisticsCalculator> toStatisticCalculator =
+    private static final Function<Integer, LuckyStatisticsCalculator> toStatisticCalculator =
             ((Function<Integer, Supplier<Stream<Ticket>>>) Main::getTicketSupplier)
                     .andThen(Main::getStatisticsCalculator);
 
@@ -26,8 +26,16 @@ public class Main {
 
     public static void main(String[] args) {
         var start = System.currentTimeMillis();
-        var count = getInstance(8).count();
+        Counter counter = getInstance(8);
+
+        var count = counter.getCount();
         var end = System.currentTimeMillis();
+
+        System.out.printf("Всего %d счастливых билетов.\nВремя работы метода %d мс.\n", count, end - start);
+
+        start = System.currentTimeMillis();
+        count = counter.getCount();
+        end = System.currentTimeMillis();
 
         System.out.printf("Всего %d счастливых билетов.\nВремя работы метода %d мс.\n", count, end - start);
 
