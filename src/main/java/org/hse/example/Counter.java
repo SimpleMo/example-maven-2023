@@ -2,6 +2,7 @@ package org.hse.example;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.function.Function;
@@ -33,19 +34,14 @@ public interface Counter {
 /**
  * Реализация {@link Counter}
  */
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class CounterImpl implements Counter {
-    private final int length;
-
-    public CounterImpl(int length) {
-        this.length = length;
-    }
+    @Getter
+    int length;
 
     protected Lucky getInstance(final int length, final int number) {
         return Ticket.getInstance(length, number);
-    }
-
-    public int getLength() {
-        return length;
     }
 
     /**
