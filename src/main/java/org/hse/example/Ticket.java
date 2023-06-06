@@ -6,9 +6,6 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
-import java.util.Set;
-
 
 /**
  * Сущность Билет
@@ -57,6 +54,10 @@ public interface Ticket extends Lucky {
         @Override
         public boolean isLucky() {
             // todo покрыть тестами
+            if (getLength() % 2 != 0) {
+                return false;
+            }
+
             int middle = getLength() / 2;
             int half = Double.valueOf(Math.pow(10, middle)).intValue();
 
