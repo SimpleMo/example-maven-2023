@@ -1,5 +1,8 @@
 package org.hse.example;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -25,8 +28,12 @@ public class Main {
     }
 
     public static void main(String[] args) {
+
+        ApplicationContext context =
+                new AnnotationConfigApplicationContext("org.hse.example");
+
         var start = System.currentTimeMillis();
-        Counter counter = getInstance(8);
+        Counter counter = context.getBean("counterEight", Counter.class);
 
         var count = counter.getCount();
         var end = System.currentTimeMillis();
