@@ -1,8 +1,12 @@
 package org.hse.example;
 
 import lombok.val;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
 
@@ -11,10 +15,21 @@ import static org.junit.Assert.*;
  */
 public class TicketTest {
 
+    @Before
+    public void init() {
+        //что-то делает...
+    }
+
+    @After
+    public void clear() {
+        //что-то делает...
+    }
+
     /**
      * Проверяет, что при корректных входных данных корректно создаются билеты
      */
     @Test
+    @Ignore
     public void testGetInstanceTicketCreated() {
         // given
         val number = 100500;

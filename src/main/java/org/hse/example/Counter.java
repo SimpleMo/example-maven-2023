@@ -3,6 +3,7 @@ package org.hse.example;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.util.function.Function;
@@ -63,13 +64,14 @@ class CounterImpl implements Counter {
     }
 }
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 class CounterStreamImpl extends CounterImpl implements Supplier<Stream<Ticket>> {
 
     @Getter(lazy = true)
-    int count = this.count();
+    final int count = this.count();
 
-    private IntFunction<Ticket> toTicket =
+    @Setter(AccessLevel.PACKAGE)
+    IntFunction<Ticket> toTicket =
             ((Function<Integer, Lucky>) num -> this.getInstance(getLength(), num)).andThen(Ticket.class::cast)::apply;
 
     public CounterStreamImpl(int length) {

@@ -46,6 +46,14 @@ public interface Ticket extends Lucky {
         @Setter(AccessLevel.NONE)
         int number;
 
+        int getDigitsSum(final Ticket ticket) {
+            return TicketUtils.getDigitsSum(ticket).orElse(0);
+        }
+
+        void print() {
+            System.out.printf("Билет №%d\n", 100500);
+        }
+
         /**
          * Вычисляет, является ли билет счастливым
          *
