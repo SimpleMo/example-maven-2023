@@ -1,6 +1,10 @@
 package org.hse.example;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +22,11 @@ import java.util.stream.Stream;
  */
 @Configuration("javaConfiguration")
 @ComponentScan({"org.hse.example"})
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class Config {
+    ApplicationContext context;
+
     @Primary
     @Bean("counterSix")
     Counter getCounterSix() {
@@ -26,7 +34,11 @@ public class Config {
     }
     @Bean("counterEight")
     Counter getCounterEight() {
-        return new CounterStreamImpl(8, Optional.of(num -> new Ticket.TicketImpl(8, num)));
+        IntFunction<Ticket> toTicket = num -> {
+            var ticket = context.getBean(Ticket.TicketImpl.class);
+            return ticket.setLength(8).setNumber(num);
+        };
+        return new CounterStreamImpl(8, Optional.of(toTicket));
     }
 
     @Bean
