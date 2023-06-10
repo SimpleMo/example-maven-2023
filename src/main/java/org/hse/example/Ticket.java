@@ -1,12 +1,10 @@
 package org.hse.example;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 
 /**
@@ -32,26 +30,20 @@ public interface Ticket extends Lucky {
      * Реализация Сущности Билет
      */
     @Data
-    @Component
-    @Accessors(chain = true)
     @AllArgsConstructor
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    @FieldDefaults(level = AccessLevel.PRIVATE)
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     class TicketImpl implements Ticket {
-        TicketImpl() {
-            System.out.println("This is ticket");
-        }
 
         /**
          * Количество цифр в номере билета
          */
-        @Setter(AccessLevel.PACKAGE)
+        @Setter(AccessLevel.NONE)
         int length;
 
         /**
          * Номер билета
          */
-        @Setter(AccessLevel.PACKAGE)
+        @Setter(AccessLevel.NONE)
         int number;
 
         int getDigitsSum(final Ticket ticket) {
