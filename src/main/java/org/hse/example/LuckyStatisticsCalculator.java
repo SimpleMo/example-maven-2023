@@ -1,5 +1,11 @@
 package org.hse.example;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,12 +27,18 @@ public interface LuckyStatisticsCalculator {
 /**
  * Реализация {@link LuckyStatisticsCalculator}
  */
+@Service
+@NoArgsConstructor
 class LuckyStatisticsCalculatorImpl implements LuckyStatisticsCalculator {
-    private Stream<Ticket> tickets;
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    private final Stream<Ticket> tickets = prepare();
 
-    public LuckyStatisticsCalculatorImpl(Supplier<Stream<Ticket>> supplier) {
-        this.tickets = supplier.get();
+    private final Stream<Ticket> prepare() {
+        return ticketsSupplier.get();
     }
+
+    @Autowired
+    private Supplier<Stream<Ticket>> ticketsSupplier;
 
     /**
      * Вычисляет статистику по счастливым билетам
@@ -36,7 +48,7 @@ class LuckyStatisticsCalculatorImpl implements LuckyStatisticsCalculator {
     @Override
     public Map<Integer, Integer> getStatistic() {
         Map<Integer, Integer> result = new ConcurrentHashMap<>(new HashMap<>());
-        tickets
+        getTickets()
                 .map(Ticket::getNumber)
                 .map(TicketUtils::getDigitsSum)
                 .map(sum -> sum / 2)

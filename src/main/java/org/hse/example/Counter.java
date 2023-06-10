@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
@@ -78,13 +79,14 @@ class CounterStreamImpl extends CounterImpl implements Supplier<Stream<Ticket>> 
     IntFunction<Ticket> toTicket =
             ((Function<Integer, Lucky>) num -> this.getInstance(getLength(), num)).andThen(Ticket.class::cast)::apply;
 
-    public CounterStreamImpl(int length) {
+    public CounterStreamImpl(final int length,
+                             final Optional<IntFunction<Ticket>> toTicket) {
         super(length);
+        toTicket.ifPresent(this::setToTicket);
     }
 
     @Override
     public int count() {
-        // todo покрыть тестами
         return (int) get().count();
 
     }

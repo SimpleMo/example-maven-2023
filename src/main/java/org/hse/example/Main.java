@@ -12,29 +12,12 @@ import java.util.stream.Stream;
  */
 public class Main {
 
-    private static final Function<Integer, LuckyStatisticsCalculator> toStatisticCalculator =
-            ((Function<Integer, Supplier<Stream<Ticket>>>) Main::getTicketSupplier)
-                    .andThen(Main::getStatisticsCalculator);
-
-    private static Counter getInstance(int length) {
-        return new CounterStreamImpl(length);
-    }
-    private static Supplier<Stream<Ticket>> getTicketSupplier(int length) {
-        return new CounterStreamImpl(length);
-    }
-
-    private static LuckyStatisticsCalculator getStatisticsCalculator(Supplier<Stream<Ticket>> ticketsSupplier) {
-        return new LuckyStatisticsCalculatorImpl(ticketsSupplier);
-    }
-
     public static void main(String[] args) {
 
-        ApplicationContext context =
-                new AnnotationConfigApplicationContext("org.hse.example");
+        var context = new AnnotationConfigApplicationContext(Config.class);
+        var counter = context.getBean("counterEight", Counter.class);
 
         var start = System.currentTimeMillis();
-        Counter counter = context.getBean("counterEight", Counter.class);
-
         var count = counter.getCount();
         var end = System.currentTimeMillis();
 
@@ -46,8 +29,10 @@ public class Main {
 
         System.out.printf("Всего %d счастливых билетов.\nВремя работы метода %d мс.\n", count, end - start);
 
+        var statisticsCalculator = context.getBean(LuckyStatisticsCalculator.class);
+
         start = System.currentTimeMillis();
-        var statistics = toStatisticCalculator.apply(8).getStatistic();
+        var statistics = statisticsCalculator.getStatistic();
         end = System.currentTimeMillis();
 
         System.out.printf("Счастливые билеты в разрезе суммы цифр\n%s\nВремя работы метода %d мс.\n", statistics, end - start);
