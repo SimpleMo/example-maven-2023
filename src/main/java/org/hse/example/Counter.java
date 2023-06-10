@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -98,5 +99,23 @@ class CounterStreamImpl extends CounterImpl implements Supplier<Stream<Ticket>> 
                 .parallel()
                 .mapToObj(toTicket)
                 .filter(Lucky::isLucky);
+    }
+}
+
+/**
+ * Реализация с дополнительной проверкой кратности номера билета
+ */
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+class CounterMultiplicityImpl implements Counter {
+    Stream<Ticket> tickets;
+    Predicate<Ticket> multiplicityChecker;
+
+    @Getter(lazy = true)
+    final int count = this.count();
+
+    @Override
+    public int count() {
+        return (int) tickets.filter(multiplicityChecker).count();
     }
 }

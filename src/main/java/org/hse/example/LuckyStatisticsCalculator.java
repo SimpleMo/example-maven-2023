@@ -30,15 +30,15 @@ public interface LuckyStatisticsCalculator {
 @Service
 @NoArgsConstructor
 class LuckyStatisticsCalculatorImpl implements LuckyStatisticsCalculator {
+    @Autowired
+    private Supplier<Stream<Ticket>> ticketsSupplier;
+
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final Stream<Ticket> tickets = prepare();
 
-    private final Stream<Ticket> prepare() {
+    private  Stream<Ticket> prepare() {
         return ticketsSupplier.get();
     }
-
-    @Autowired
-    private Supplier<Stream<Ticket>> ticketsSupplier;
 
     /**
      * Вычисляет статистику по счастливым билетам
