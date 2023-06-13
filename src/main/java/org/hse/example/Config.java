@@ -53,8 +53,8 @@ public class Config {
 
     @Bean("multiplesOfFive")
     Counter getMultiplesOfFiveCounter(final Supplier<Stream<Ticket>> ticketStreamSupplier,
-                                       @Qualifier("multiplesOfFiveChecker")
-                                       final Predicate<Ticket> multiplicityChecker) {
+                                      @Qualifier("multiplesOfFiveChecker")
+                                      final Predicate<Ticket> multiplicityChecker) {
         return new CounterMultiplicityImpl(ticketStreamSupplier.get(), multiplicityChecker);
     }
 

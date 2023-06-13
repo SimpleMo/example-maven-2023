@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.hse.example.entities.TicketEntity;
+import org.hse.example.repositories.TicketEntityRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -72,6 +75,8 @@ class CounterImpl implements Counter {
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class CounterStreamImpl extends CounterImpl implements Supplier<Stream<Ticket>> {
+    @Autowired
+    TicketEntityRepository repository;
 
     @Getter(lazy = true)
     final int count = this.count();
@@ -98,7 +103,15 @@ class CounterStreamImpl extends CounterImpl implements Supplier<Stream<Ticket>> 
                 .range(0, (int) Math.pow(10, getLength()))
                 .parallel()
                 .mapToObj(toTicket)
-                .filter(Lucky::isLucky);
+                .filter(Lucky::isLucky)
+                .peek(ticket -> {
+                    if (repository.existsByLengthAndNumber(ticket.getLength(), ticket.getNumber())) {
+                        return;
+                    }
+
+                    var entity = TicketEntity.builder().number(ticket.getNumber()).length(ticket.getLength()).build();
+                    repository.save(entity);
+                });
     }
 }
 
